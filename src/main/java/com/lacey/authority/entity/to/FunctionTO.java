@@ -1,16 +1,9 @@
-package com.lacey.authority.entity.po;
+package com.lacey.authority.entity.to;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+public class FunctionTO {
 
-@TableName("function")
-public class Function extends Model<Function> {
-
-    @TableId
     private String id;
     private String name;
-    private String code;
     private String parentId;
 
     public String getId() {
@@ -27,14 +20,6 @@ public class Function extends Model<Function> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getParentId() {
