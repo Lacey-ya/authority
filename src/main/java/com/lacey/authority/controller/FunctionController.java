@@ -1,15 +1,12 @@
 package com.lacey.authority.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.lacey.authority.entity.to.FunctionSaveTO;
 import com.lacey.authority.entity.to.FunctionTO;
 import com.lacey.authority.service.FunctionService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,10 +24,21 @@ public class FunctionController {
             @ApiResponse(code = 200,message = "成功",response =String.class),
             @ApiResponse(code = 500,message = "失败",response = String.class)})
     @GetMapping("/function/list")
-    public String getFunctionList(@RequestParam(required = false,value = "parentId") String parentId){
+    public String getFunctionList(@RequestParam(value = "parentId", required = false) String parentId){
         List<FunctionTO> functionTOS = functionService.getFunctionListByParentId(parentId);
         return JSON.toJSONString(functionTOS);
     }
+
+    @ApiOperation(value = "新增一条功能点数据",notes = "新增一条功能点数据")
+    @ApiImplicitParam(name = "functionSaveTO",value = "新增数据",required = true,dataType = "FunctionSaveTO",paramType = "body")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @PostMapping("/function")
+    public void insertFunction(@RequestBody FunctionSaveTO functionSaveTO){
+        functionService.insertFunction(functionSaveTO);
+    }
+
 
 
 }

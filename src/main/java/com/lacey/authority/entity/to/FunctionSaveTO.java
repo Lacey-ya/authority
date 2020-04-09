@@ -12,7 +12,6 @@ public class FunctionSaveTO {
     private String name;
     private String code;
     private String parentId;
-    private String roleId;
 
     public String getId() {
         return id;
@@ -46,11 +45,4 @@ public class FunctionSaveTO {
         this.parentId = parentId;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
 }
