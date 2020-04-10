@@ -29,9 +29,16 @@ public interface FunctionService extends IService<Function> {
 
     /**
      * 修改功能数据
+     * @param function
+     * @return
+     */
+    boolean updateFunction(Function function);
+
+    /**
+     * 根据id删除功能数据
      * @param id
      * @return
      */
-    boolean updateFunction(String id);
+    boolean deleteFunction(String id);
 
 }

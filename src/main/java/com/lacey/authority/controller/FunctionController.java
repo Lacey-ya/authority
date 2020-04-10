@@ -1,6 +1,7 @@
 package com.lacey.authority.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.lacey.authority.entity.po.Function;
 import com.lacey.authority.entity.to.FunctionSaveTO;
 import com.lacey.authority.entity.to.FunctionTO;
 import com.lacey.authority.service.FunctionService;
@@ -39,6 +40,14 @@ public class FunctionController {
         functionService.insertFunction(functionSaveTO);
     }
 
-
+    @ApiOperation(value = "修改功能点数据",notes = "修改功能点数据")
+    @ApiImplicitParam(name = "function",value = "修改的数据",required = true,dataType = "Function",paramType = "body")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @PutMapping("/function")
+    public void updateFunction(@RequestBody Function function){
+        functionService.updateFunction(function);
+    }
 
 }

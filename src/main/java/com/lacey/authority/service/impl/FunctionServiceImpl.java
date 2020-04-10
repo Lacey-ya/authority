@@ -75,7 +75,16 @@ public class FunctionServiceImpl extends ServiceImpl<FunctionMapper, Function> i
     }
 
     @Override
-    public boolean updateFunction(String id) {
+    public boolean updateFunction(Function function) {
+        int result =  functionMapper.updateById(function);
+        if (result<0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteFunction(String id) {
 
         return false;
     }
