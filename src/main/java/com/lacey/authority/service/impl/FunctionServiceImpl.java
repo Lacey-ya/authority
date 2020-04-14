@@ -85,8 +85,23 @@ public class FunctionServiceImpl extends ServiceImpl<FunctionMapper, Function> i
 
     @Override
     public boolean deleteFunction(String id) {
+        //先删除功能与角色的关联表数据
+        int count = functionRoleMapper.delete(new QueryWrapper<FunctionRole>().eq("functionId",id));
+        if (count<0){
+            return false;
+        }
+        //再删除功能表数据
+        count = functionMapper.deleteById(id);
+        if (count<0){
+            return false;
+        }
+        return true;
+    }
 
-        return false;
+    @Override
+    public Function getFunctionDetailById(String id) {
+        Function function = functionMapper.selectById(id);
+        return function;
     }
 
     /**

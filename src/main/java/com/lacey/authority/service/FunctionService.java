@@ -41,4 +41,12 @@ public interface FunctionService extends IService<Function> {
      */
     boolean deleteFunction(String id);
 
+    /**
+     * 根据ID获取功能详情数据
+     * @param id
+     * @return
+     */
+    Function getFunctionDetailById(String id);
+
+
 }
