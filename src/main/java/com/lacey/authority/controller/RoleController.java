@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value = "自学项目",tags = "角色表测试")
 @RestController
 @RequestMapping("/api/role")
 public class RoleController {
@@ -23,11 +24,11 @@ public class RoleController {
     private RoleService roleService;
 
     @ApiOperation(value = "获取角色分页列表",notes = "获取角色分页列表")
-    @ApiImplicitParams(
-            {@ApiImplicitParam(name = "pageNum",value = "当前页码",required = true,dataType = "int",paramType = "query")},
-            {@ApiImplicitParam(name = "pageSize",value = "页面容量",required = true,dataType = "int",paramType = "query")},
-            {@ApiImplicitParam(name = "name",value = "模糊查询参数（名称）",required = true,dataType = "String",paramType = "query")}
-    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "当前页码",required = true,dataType = "int",paramType = "query", example = "1"),
+            @ApiImplicitParam(name = "pageSize",value = "页面容量",required = true,dataType = "int",paramType = "query", example = "1"),
+            @ApiImplicitParam(name = "name",value = "模糊查询参数（名称）",required = false,dataType = "String",paramType = "query")
+    })
     @ApiResponses(value = {
             @ApiResponse(code = 200,message = "成功",response =String.class),
             @ApiResponse(code = 500,message = "失败",response = String.class)})

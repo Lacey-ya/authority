@@ -9,13 +9,6 @@ import com.lacey.authority.entity.vo.RoleListVO;
 public interface RoleService extends IService<Role> {
 
     /**
-     * 新增角色以及和功能的绑定数据
-     * @param roleSaveTO
-     * @return
-     */
-    boolean insertRole(RoleSaveTO roleSaveTO);
-
-    /**
      * 获取角色分页列表
      * @param pageNum
      * @param pageSize
@@ -23,4 +16,12 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     CustomPage<RoleListVO> getRoleTable(int pageNum, int pageSize, String name);
+
+    /**
+     * 新增角色以及和功能的绑定数据
+     * @param roleSaveTO
+     * @return
+     */
+    boolean insertRole(RoleSaveTO roleSaveTO);
+
 }
