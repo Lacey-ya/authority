@@ -1,5 +1,7 @@
 package com.lacey.authority.entity.to;
 
+import java.util.List;
+
 /**
  * @ClassName RoleSaveTO
  * @Description 保存角色以及和功能的绑定数据
@@ -12,7 +14,8 @@ public class RoleSaveTO {
     private String name;
     private String code;
     private String description;
-    private String functionIds;
+    //这里不需要用泛型T，因为文档中标明了是String类型
+    private List<String> functionIds;
     public String getId() {
         return id;
     }
@@ -44,11 +47,11 @@ public class RoleSaveTO {
         this.description = description;
     }
 
-    public String getFunctionIds() {
+    public List<String> getFunctionIds() {
         return functionIds;
     }
 
-    public void setFunctionIds(String functionIds) {
+    public void setFunctionIds(List<String> functionIds) {
         this.functionIds = functionIds;
     }
 }
