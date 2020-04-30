@@ -7,10 +7,10 @@
     </resultMap>
 
     <insert id="insertBatch">
-        insert into function_role(roleId, functionId) values
+        insert into function_role(roleId,functionId) values
         <foreach collection="functionRoles" separator="," item="functionRole">
-            (#{functionRole.roleId}, #{functionRole.functionId})
+            (#{functionRole.roleId},#{functionRole.functionId})
         </foreach>
-
     </insert>
+    
 </mapper>

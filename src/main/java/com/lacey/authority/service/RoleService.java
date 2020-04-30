@@ -6,6 +6,8 @@ import com.lacey.authority.entity.to.RoleSaveTO;
 import com.lacey.authority.entity.vo.CustomPage;
 import com.lacey.authority.entity.vo.RoleListVO;
 
+import java.util.List;
+
 public interface RoleService extends IService<Role> {
 
     /**
@@ -23,5 +25,26 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     boolean insertRole(RoleSaveTO roleSaveTO);
+
+    /**
+     * 修改角色数据以及绑定的功能数据
+     * @param roleSaveTO
+     * @return
+     */
+    boolean updateRole(RoleSaveTO roleSaveTO);
+
+    /**
+     * 删除角色数据以及绑定的功能和用户数据
+     * @param id
+     * @return
+     */
+    boolean deleteRole(String id);
+
+    /**
+     * 根据id获取角色详情数据
+     * @param id
+     * @return
+     */
+    RoleSaveTO getRoleDetailListById(String id);
 
 }

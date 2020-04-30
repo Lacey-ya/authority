@@ -40,15 +40,49 @@ public class RoleController {
         return JSON.toJSONString(customPage);
     }
 
-    @ApiOperation(value = "保存角色以及和功能的绑定数据",notes = "保存角色以及和功能的绑定数据")
+    @ApiOperation(value = "新增角色以及和功能的绑定数据",notes = "新增角色以及和功能的绑定数据")
     @ApiImplicitParam(name = "roleSaveTO",value = "新增数据",required = true,dataType = "RoleSaveTO",paramType = "body")
     @ApiResponses(value = {
             @ApiResponse(code = 200,message = "成功",response =String.class),
             @ApiResponse(code = 500,message = "失败",response = String.class)})
     @PostMapping
     public void insertRole(@RequestBody RoleSaveTO roleSaveTO){
-        logger.debug("开始进入controller层的insertRole方法------------------------------>");
+        logger.debug("开始进入controller层的insertRole方法-------------------------------->");
         roleService.insertRole(roleSaveTO);
+    }
+
+    @ApiOperation(value = "修改角色数据以及绑定的功能数据",notes = "修改角色数据以及绑定的功能数据")
+    @ApiImplicitParam(name = "roleSaveTO",value = "修改数据",required = true,dataType = "RoleSaveTO",paramType = "body")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @PutMapping
+    public void updateRole(@RequestBody RoleSaveTO roleSaveTO){
+        logger.debug("开始进入controller层的updateRole方法-------------------------------->");
+        roleService.updateRole(roleSaveTO);
+    }
+
+    @ApiOperation(value = "删除角色数据以及绑定的功能和用户数据",notes = "删除角色数据以及绑定的功能和用户数据")
+    @ApiImplicitParam(name = "id",value = "要删除的角色id",required = true,dataType = "String",paramType = "path")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @DeleteMapping("/{id}")
+    public void deleteRole(@PathVariable("id") String id){
+        logger.debug("开始进入controller层的deleteRole方法-------------------------------->");
+        roleService.deleteRole(id);
+    }
+
+    @ApiOperation(value = "根据id获取角色详情数据",notes = "根据id获取角色详情数据")
+    @ApiImplicitParam(name = "id",value = "获取角色详情的id",required = true,dataType = "String",paramType = "query")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @GetMapping("/detail")
+    public String getRoleDetailListById(@RequestParam String id){
+        logger.debug("开始进入controller层的getRoleDetailListById方法-------------------------------->");
+        RoleSaveTO roleSaveTO = roleService.getRoleDetailListById(id);
+        return JSON.toJSONString(roleSaveTO);
     }
 
 }

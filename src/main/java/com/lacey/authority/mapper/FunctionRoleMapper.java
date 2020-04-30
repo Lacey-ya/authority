@@ -2,6 +2,7 @@ package com.lacey.authority.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lacey.authority.entity.po.FunctionRole;
+import com.lacey.authority.entity.to.RoleSaveTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface FunctionRoleMapper extends BaseMapper<FunctionRole> {
      * @return
      */
     int insertBatch(@Param("functionRoles") List<FunctionRole> functionRoles);
+
 }
