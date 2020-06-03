@@ -19,6 +19,7 @@ import com.lacey.authority.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return false;
         }
 
-
-        return false;
+//        if (CollectionUtils.isEmpty(userSaveTo.getAddRoles())){
+//            return new ArrayList<>();
+//        }
+        List<UserRole> userRoles = new ArrayList<>();
+        for (String addRoles : userSaveTo.getAddRoles()){
+            UserRole userRole = new UserRole();
+            userRole.setUserName(userSaveTo.getName());
+            userRole.setRoleId(addRoles);
+            userRoles.add(userRole);
+        }
+        result=userRoleMapper.insertBatch(userRoles);
+        if (result<0){
+            return false;
+        }
+        return true;
     }
 }

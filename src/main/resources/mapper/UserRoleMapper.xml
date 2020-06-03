@@ -5,4 +5,11 @@
         <result column="userName" property="userName"/>
         <result column="roleId" property="roleId"/>
     </resultMap>
+
+    <insert id="insertBatch">
+        insert into user_role(userName,roleId) values
+        <foreach collection="addRoles" separator="," item="userRole">
+            (#{userRole.userName},#{userRole.roleId})
+        </foreach>
+    </insert>
 </mapper>

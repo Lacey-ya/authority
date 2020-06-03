@@ -1,18 +1,17 @@
 package com.lacey.authority.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.lacey.authority.entity.to.UserSaveTo;
 import com.lacey.authority.entity.vo.CustomPage;
 import com.lacey.authority.entity.vo.RoleListVO;
 import com.lacey.authority.entity.vo.UserListVO;
 import com.lacey.authority.service.UserService;
+import com.lacey.authority.service.impl.UserServiceImpl;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "自学项目",tags = "用户表测试")
 @RestController
@@ -41,6 +40,19 @@ public class UserController {
         CustomPage<UserListVO> customPage = userService.getUserTable(pageNum,pageSize,name);
         return JSON.toJSONString(customPage);
     }
+
+    @ApiOperation(value = "新增用户数据",notes = "新增用户数据")
+    @ApiImplicitParams(@ApiImplicitParam(name = "userSaveTo",value = "新增用户数据",required = true,dataType = "UserSaveTo"))
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @PostMapping
+    public void insertUser(@RequestBody UserSaveTo userSaveTo){
+        logger.debug("开始进入controller层的insertUser方法-------------------------------->");
+        userService.insertUser(userSaveTo);
+    }
+
+
 
 
 }
