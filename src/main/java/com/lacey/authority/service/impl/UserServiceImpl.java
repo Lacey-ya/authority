@@ -8,14 +8,12 @@ import com.lacey.authority.entity.po.Role;
 import com.lacey.authority.entity.po.User;
 import com.lacey.authority.entity.po.UserRole;
 import com.lacey.authority.entity.to.UserSaveTo;
-import com.lacey.authority.entity.vo.CustomPage;
-import com.lacey.authority.entity.vo.Pagination;
-import com.lacey.authority.entity.vo.UserListVO;
-import com.lacey.authority.entity.vo.UserRoleListVO;
+import com.lacey.authority.entity.vo.*;
 import com.lacey.authority.mapper.RoleMapper;
 import com.lacey.authority.mapper.UserMapper;
 import com.lacey.authority.mapper.UserRoleMapper;
 import com.lacey.authority.service.UserService;
+import com.mysql.cj.xdevapi.UpdateParams;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,5 +133,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean updateUser(UserRoleUpVO userRoleUpVO) {
+        User user = new User();
+        user.setId(userRoleUpVO.getId());
+        user.setName(userRoleUpVO.getName());
+        boolean result = updateById(user);//修改用户表
+
+        UserRole userRole = new UserRole();
+        userRole.setUserName(userRoleUpVO.getName());
+
+
+        int count = userRoleMapper.delete(new QueryWrapper<UserRole>().eq("roleId",userRoleUpVO.getDeleteRoles()));//要删除绑定的角色
+        if (count<0){
+            return false;
+        }
+        List<UserRole> userRoles = new ArrayList<>();
+        for (String addRoles : userRoleUpVO.getAddRoles()){
+            userRole.setUserName(user.getName());
+            userRole.setRoleId(addRoles);
+            userRoles.add(userRole);
+        }
+        count = userRoleMapper.insertBatch(userRoles);//要新增绑定的角色
+        if (count<0){
+            return false;
+        }
+        return result;
     }
 }

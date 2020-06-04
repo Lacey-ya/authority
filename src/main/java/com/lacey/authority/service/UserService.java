@@ -5,6 +5,7 @@ import com.lacey.authority.entity.po.User;
 import com.lacey.authority.entity.to.UserSaveTo;
 import com.lacey.authority.entity.vo.CustomPage;
 import com.lacey.authority.entity.vo.UserListVO;
+import com.lacey.authority.entity.vo.UserRoleUpVO;
 
 public interface UserService extends IService<User> {
 
@@ -23,5 +24,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean insertUser(UserSaveTo userSaveTo);
+
+    /**
+     * 修改用户数据
+     * @param userRoleUpVO
+     * @return
+     */
+    boolean updateUser(UserRoleUpVO userRoleUpVO);
 
 }
