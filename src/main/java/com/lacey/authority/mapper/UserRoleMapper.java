@@ -21,4 +21,11 @@ public interface UserRoleMapper extends BaseMapper<UserRole> {
      */
     int insertBatch(@Param("addRoles")List<UserRole> userRoles);
 
+    /**
+     * 修改用户角色关联表中的用户名
+     * @param oldName 旧用户名
+     * @param newName 新用户名
+     * @return
+     */
+    int updateUserName(@Param("oldName") String oldName, @Param("newName") String newName);
 }

@@ -12,4 +12,10 @@
             (#{userRole.userName},#{userRole.roleId})
         </foreach>
     </insert>
+
+    <update id="updateUserName" parameterType="java.lang.String">
+        update user_role set userName = #{newName} where userName = #{oldName}
+    </update>
 </mapper>
+
+

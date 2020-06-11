@@ -38,13 +38,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CustomPage<UserListVO> getUserTable(int pageNum, int pageSize, String name) {
         //使用mybatis plus的page类封装分页参数----->当前页码和页码容量参数
-        Page<User> pageParam = new Page<>(pageNum,pageSize);
+        Page<User> pageParam = new Page<>(pageNum, pageSize);
         //然后使用mybatis plus的分页查询方法查询数据
         IPage<User> pageDate;
-        if (StringUtils.isBlank(name)){
-            pageDate = userMapper.selectPage(pageParam,new QueryWrapper<User>());
-        }else {
-            pageDate = userMapper.selectPage(pageParam,new QueryWrapper<User>().like("name",name));
+        if (StringUtils.isBlank(name)) {
+            pageDate = userMapper.selectPage(pageParam, new QueryWrapper<User>());
+        } else {
+            pageDate = userMapper.selectPage(pageParam, new QueryWrapper<User>().like("name", name));
         }
         //然后将分页数据拿出来
         List<User> users = pageDate.getRecords();
@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 再然后就是直接for循环从集合中筛选出想要的数据就行了。
         // 这样循环里连那个根据用户名查询角色id的SQL都不用写了
         List<String> userNames = new ArrayList<>();
-        for (User user:users){
+        for (User user : users) {
             userNames.add(user.getName());
         }
         List<UserRole> userRoles = userRoleMapper.selectList(new QueryWrapper<UserRole>().in("userName", userNames));
@@ -70,9 +70,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 这里我们已经拿到了【用户名和角色id】的绑定数据，还有【角色表】数据
         // 现在我们先把这两种数据整合，整合成【用户名和角色名】的绑定数据，即把角色id替换为角色名
         List<UserRoleListVO> userRoleListVOS = new ArrayList<>();
-        for (Role role : roleList){
-            for (UserRole userRole : userRoles){
-                if (userRole.getRoleId().equals(role.getId())){
+        for (Role role : roleList) {
+            for (UserRole userRole : userRoles) {
+                if (userRole.getRoleId().equals(role.getId())) {
                     UserRoleListVO userRoleListVO = new UserRoleListVO();
                     userRoleListVO.setUserName(userRole.getUserName());
                     userRoleListVO.setRoleName(role.getName());
@@ -83,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //到这里，【用户表】数据、【用户名和角色名】绑定数据都已经拿到，现在只需要for循环遍历去获取出来
         List<UserListVO> userListVOList = new ArrayList<>();
-        for (User user : users){
+        for (User user : users) {
             UserListVO userListVO = new UserListVO();
             //先将user表基础数据赋给用户列表的封装类UserListVO
             userListVO.setId(user.getId());
@@ -91,8 +91,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             //然后再去循环【用户名和角色名】获取角色名称
             List<String> roles = new ArrayList<>();
-            for (UserRoleListVO userRoleListVO : userRoleListVOS){
-                if (user.getName().equals(userRoleListVO.getUserName())){
+            for (UserRoleListVO userRoleListVO : userRoleListVOS) {
+                if (user.getName().equals(userRoleListVO.getUserName())) {
                     roles.add(userRoleListVO.getRoleName());
                 }
             }
@@ -114,7 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setId(UUID.randomUUID().toString());
         user.setName(userSaveTo.getName());
         int result = userMapper.insert(user);
-        if (result<0){
+        if (result < 0) {
             return false;
         }
 
@@ -122,14 +122,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //            return new ArrayList<>();
 //        }
         List<UserRole> userRoles = new ArrayList<>();
-        for (String addRoles : userSaveTo.getAddRoles()){
+        for (String addRoles : userSaveTo.getAddRoles()) {
             UserRole userRole = new UserRole();
             userRole.setUserName(userSaveTo.getName());
             userRole.setRoleId(addRoles);
             userRoles.add(userRole);
         }
-        result=userRoleMapper.insertBatch(userRoles);
-        if (result<0){
+        result = userRoleMapper.insertBatch(userRoles);
+        if (result < 0) {
             return false;
         }
         return true;
@@ -137,29 +137,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean updateUser(UserRoleUpVO userRoleUpVO) {
+        // 先根据id查出旧数据
+        User oldUser = userMapper.selectById(userRoleUpVO.getId());
+
+        // 开始进行update逻辑
         User user = new User();
         user.setId(userRoleUpVO.getId());
         user.setName(userRoleUpVO.getName());
         boolean result = updateById(user);//修改用户表
 
+        // 然后判断下用户名是否做过修改，如果做过修改，那么在修改用户角色关联表的绑定数据前，
+        // 先修改下用户名，避免两表用户名不一致
+        if (!oldUser.getName().equals(userRoleUpVO.getName())) {
+            int count = userRoleMapper.updateUserName(oldUser.getName(), userRoleUpVO.getName());
+            if (count < 0) {
+                return false;
+            }
+        }
+        int count;
+        if (!CollectionUtils.isEmpty(userRoleUpVO.getDeleteRoles())){
+            count = userRoleMapper.delete(new QueryWrapper<UserRole>().in("roleId", userRoleUpVO.getDeleteRoles())
+                    .eq("userName", userRoleUpVO.getName()));//要删除绑定的角色，不止要匹配角色id，还要匹配用户名，万一也有别的用户绑定了这个角色，岂不是也被删了
+            if (count < 0) {
+                return false;
+            }
+        }
         UserRole userRole = new UserRole();
-        userRole.setUserName(userRoleUpVO.getName());
+        if (!CollectionUtils.isEmpty(userRoleUpVO.getAddRoles())){
+            List<UserRole> userRoles = new ArrayList<>();
+            for (String addRoles : userRoleUpVO.getAddRoles()) {
+                userRole.setUserName(user.getName());
+                userRole.setRoleId(addRoles);
+                userRoles.add(userRole);
+            }
+            count = userRoleMapper.insertBatch(userRoles);//要新增绑定的角色
+            if (count < 0) {
+                return false;
+            }
+        }
 
-
-        int count = userRoleMapper.delete(new QueryWrapper<UserRole>().eq("roleId",userRoleUpVO.getDeleteRoles()));//要删除绑定的角色
-        if (count<0){
-            return false;
-        }
-        List<UserRole> userRoles = new ArrayList<>();
-        for (String addRoles : userRoleUpVO.getAddRoles()){
-            userRole.setUserName(user.getName());
-            userRole.setRoleId(addRoles);
-            userRoles.add(userRole);
-        }
-        count = userRoleMapper.insertBatch(userRoles);//要新增绑定的角色
-        if (count<0){
-            return false;
-        }
         return result;
     }
 }
