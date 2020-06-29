@@ -32,4 +32,11 @@ public interface UserService extends IService<User> {
      */
     boolean updateUser(UserRoleUpVO userRoleUpVO);
 
+    /**
+     * 删除用户数据
+     * @param id
+     * @return
+     */
+    boolean deleteUser(String id);
+
 }

@@ -178,4 +178,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         return result;
     }
+
+    @Override
+    public boolean deleteUser(String id) {
+        User user = userMapper.selectById(id);
+        int count = userRoleMapper.delete(new QueryWrapper<UserRole>().eq("userName",user.getName()));
+        if (count<0){
+            return false;
+        }
+        count = userMapper.deleteById(id);
+        if (count<0){
+            return false;
+        }
+        return true;
+    }
 }

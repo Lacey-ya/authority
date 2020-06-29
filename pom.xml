@@ -115,10 +115,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -134,9 +130,6 @@
             <!--<scope>test</scope>-->
         </dependency>
 
-
-
-
     </dependencies>
 
     <build>
@@ -146,9 +139,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-
-
-
     </build>
 
 </project>

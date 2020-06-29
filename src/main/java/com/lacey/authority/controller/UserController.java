@@ -12,6 +12,8 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.*;
 
 @Api(value = "自学项目",tags = "用户表测试")
@@ -64,6 +66,15 @@ public class UserController {
         userService.updateUser(userRoleUpVO);
     }
 
-
+    @ApiOperation(value = "删除用户数据以及绑定的用户角色数据",notes = "删除用户数据")
+    @ApiImplicitParam(name = "id",value = "要删除的用户id",required = true,dataType = "String",paramType = "path")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") String id){
+        logger.debug("开始进入controller层的deleteUser方法-------------------------------->");
+        userService.deleteUser(id);
+    }
 
 }
