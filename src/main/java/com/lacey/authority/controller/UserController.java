@@ -77,4 +77,17 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @ApiOperation(value = "根据id获取用户详细数据",notes = "根据id获取用户详细数据")
+    @ApiImplicitParam(name = "id",value = "获取用户详情的id",required = true,dataType = "String",paramType = "query")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "成功",response =String.class),
+            @ApiResponse(code = 500,message = "失败",response = String.class)})
+    @GetMapping("/detail")
+    public String getUserDetailListById(@RequestParam String id){
+        logger.debug("开始进入controller层的getUserDetailListById方法-------------------------------->");
+        UserListVO userListVO = userService.getUserDetailListById(id);
+        return JSON.toJSONString(userListVO);
+    }
+
+
 }

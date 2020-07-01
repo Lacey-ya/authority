@@ -1,11 +1,15 @@
 package com.lacey.authority.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lacey.authority.entity.po.Function;
 import com.lacey.authority.entity.po.User;
 import com.lacey.authority.entity.to.UserSaveTo;
 import com.lacey.authority.entity.vo.CustomPage;
 import com.lacey.authority.entity.vo.UserListVO;
+import com.lacey.authority.entity.vo.UserRoleListVO;
 import com.lacey.authority.entity.vo.UserRoleUpVO;
+
+import java.util.List;
 
 public interface UserService extends IService<User> {
 
@@ -38,5 +42,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean deleteUser(String id);
+
+    /**
+     * 根据id获取用户详细数据
+     * @param id
+     * @return
+     */
+    UserListVO getUserDetailListById(String id);
 
 }

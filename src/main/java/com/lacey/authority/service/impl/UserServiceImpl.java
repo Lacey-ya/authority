@@ -4,20 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lacey.authority.entity.po.Role;
-import com.lacey.authority.entity.po.User;
-import com.lacey.authority.entity.po.UserRole;
+import com.lacey.authority.entity.po.*;
 import com.lacey.authority.entity.to.UserSaveTo;
 import com.lacey.authority.entity.vo.*;
-import com.lacey.authority.mapper.RoleMapper;
-import com.lacey.authority.mapper.UserMapper;
-import com.lacey.authority.mapper.UserRoleMapper;
+import com.lacey.authority.mapper.*;
 import com.lacey.authority.service.UserService;
 import com.mysql.cj.xdevapi.UpdateParams;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import springfox.documentation.service.ApiListing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,4 +189,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return true;
     }
+
+    @Override
+    public UserListVO getUserDetailListById(String id) {
+        User user = userMapper.selectById(id);
+        List<UserRole> userRoles = userRoleMapper.selectList(new QueryWrapper<UserRole>().eq("userName",user.getName()));
+        List<String> roles = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(userRoles)){
+            for (UserRole userRole:userRoles){
+                roles.add(userRole.getRoleId());
+            }
+        }
+        //封装要返回的数据
+        UserListVO userListVO = new UserListVO();
+        userListVO.setId(id);
+        userListVO.setName(user.getName());
+        userListVO.setRoles(roles);
+        return userListVO;
+    }
+
 }
