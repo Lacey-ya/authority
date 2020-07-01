@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * @ClassName OpenServiceImpl
- * @Description TODO
+ * @Description
  * @Author Lacey
  * 这个类刚才没有交给spring来管理，所以运行的时候初始化报错，说找不到这个bean，就是没有注册给spring
  * 刚才那个继承的写法是因为那几个都是实体类相关的mapper和service类，而且由于用的是mybatis plus，所以是按个写法，
@@ -61,6 +61,7 @@ public class OpenServiceImpl implements OpenService {
         for (Function function : functions) {
             functionCodes.add(function.getCode());
         }
+        // todo 还可以这样写，也行的，IDEA也会记录到的，这种的就适合代码写一半，中途离开，就直接在要写的位置写一个todo的注释
         return functionCodes;
     }
 
